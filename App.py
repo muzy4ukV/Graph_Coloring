@@ -1,42 +1,59 @@
 from Constants import *
 from tkinter import *
+from Draw_Graph import *
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 
 class App(Tk):
     def __init__(self):
         super().__init__()
-        # рамка для графу
-        self.__frm_graph = Frame(self, height=WINDOW_HEIGHT, width=WINDOW_WIDTH / 16 * 11, relief=RIDGE, borderwidth=7)
-        # рамка для віджетів
-        self.__frm_btn = Frame(self, height=WINDOW_HEIGHT / 2, width=WINDOW_WIDTH / 16 * 5, relief=RAISED, borderwidth=7)
-        self.__lbl_nodes = Label(self.__frm_btn, text="Оберіть кількість вершин")
+        # Рамка для вводу
+        self.__input_frm = LabelFrame(self, text="Введення сипску ребер", relief=RAISED, borderwidth=7)
+        self.__input_canvas = Canvas(self.__input_frm)
+        self.__scrollbar = Scrollbar(self.__input_frm, orient=VERTICAL, command=self.__input_canvas.yview)
+        self.__help_frm = Frame(self.__input_canvas)
+        # Рамка для розміщення графу
+        self.__graph_frm = LabelFrame(self, text="Зображення графу", relief=RAISED, borderwidth=7)
+        # Рамка для розміщення віджетів
+        self.__widgets_frm = Frame(self, relief=RAISED, borderwidth=7)
+        self.__choose_lbl = Label(self.__widgets_frm, text="Оберіть кількість вершин")
         self.__num_nodes = StringVar()
-        self.__spn = Spinbox(self.__frm_btn, from_=2, to=30, textvariable=self.__num_nodes)
-        self.__btn_nodes = Button(self.__frm_btn, text="Задати граф", command=self.__create_entries)
+        self.__num_nodes.set("60")
+        self.__spn = Spinbox(self.__widgets_frm, from_=2, to=100, textvariable=self.__num_nodes,
+                             command=self.__create_entries)
         self.__entries = list()
 
         self.__choose_algo = IntVar()
-        self.__lbl_algo = Label(self.__frm_btn, text="Оберіть алгоритм розфарбовування")
-        self.__rbtn_greegy = Radiobutton(self.__frm_btn, variable=self.__choose_algo, value=1, text="Жадібний метод")
-        self.__rbtn_mrv = Radiobutton(self.__frm_btn, variable=self.__choose_algo, value=2, text="Пошук з поверненням (MRV)")
-        self.__rbtn_seek = Radiobutton(self.__frm_btn, variable=self.__choose_algo, value=3, text="Пошук з поверненням (Ступенева евристика)")
-        self.__btn_color = Button(self.__frm_btn, text="Розфарбувати граф")
-        self.__btn_exit = Button(self.__frm_btn, text="Вихід", command=self.__exit)
+        self.__algo_lbl = Label(self.__widgets_frm, text="Оберіть алгоритм розфарбовування")
+        self.__greedy_rbtn = Radiobutton(self.__widgets_frm, variable=self.__choose_algo, value=1,
+                                         text="Жадібний метод")
+        self.__mrv_rbtn = Radiobutton(self.__widgets_frm, variable=self.__choose_algo, value=2,
+                                      text="Пошук з поверненням (MRV)")
+        self.__seek_rbtn = Radiobutton(self.__widgets_frm, variable=self.__choose_algo, value=3,
+                                       text="Пошук з поверненням (Ступенева евристика)")
+        self.__color_btn = Button(self.__widgets_frm, text="Розфарбувати граф", command=self.__draw_graph)
 
-        # рамка для вводу
-        self.__frm_input = Frame(self, height=WINDOW_HEIGHT / 2, width=WINDOW_WIDTH / 16 * 5, relief=RAISED, borderwidth=7)
-        self.__canvas = Canvas(self.__frm_input)
-        self.__scrollbar = Scrollbar(self.__frm_input, orient=VERTICAL, command=self.__canvas.yview)
-
-        self.__frm_scnd = Frame(self.__canvas)
+        self.__exit_btn = Button(self.__widgets_frm, text="Вихід", command=self.__exit)
 
 
     def run(self):
-        self.__frm_scnd.bind('<Configure>', lambda e: self.__canvas.configure(scrollregion=self.__canvas.bbox("all")))
         self.__setup_window()
-        self.__canvas.create_window((0, 0), window=self.__frm_scnd, anchor=NW)
-        self.__canvas.configure(yscrollcommand=self.__scrollbar.set)
         self.__draw_widgets()
+
+    def __draw_widgets(self):
+        self.__put_scrollbar()
+
+        self.__create_entries()
+        self.__choose_lbl.pack()
+        self.__spn.pack()
+        self.__algo_lbl.pack()
+        self.__greedy_rbtn.pack()
+        self.__mrv_rbtn.pack()
+        self.__seek_rbtn.pack()
+        self.__color_btn.pack()
+
+        self.__exit_btn.pack()
 
     def __setup_window(self):
         self.title(WINDOW_NAME)
@@ -46,45 +63,42 @@ class App(Tk):
         self.iconbitmap(ICON_DIRECTION)
         self.resizable(False, False)
 
-        self.__frm_graph.pack(side=LEFT, fill=BOTH)
-        self.__frm_btn.pack(side=TOP, fill=BOTH)
-        self.__frm_input.pack(side=TOP, fill=BOTH, expand=1)
+        self.__input_frm.grid(row=0, column=1, sticky="nswe")
+        self.__graph_frm.grid(row=0, column=0, rowspan=2, sticky="nswe")
+        self.__widgets_frm.grid(row=1, column=1, sticky="nswe")
 
+        self.grid_columnconfigure(0, weight=10)
+        self.grid_columnconfigure(1, weight=1)
 
-        self.__canvas.pack(side=LEFT, fill=BOTH, expand=1)
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_rowconfigure(1, weight=5)
+
+    def __put_scrollbar(self):
+        self.__input_canvas.pack(side=LEFT, fill=BOTH, expand=1)
         self.__scrollbar.pack(side=RIGHT, fill=Y)
-
-    def __draw_widgets(self):
-        self.__lbl_nodes.pack()
-        self.__spn.pack()
-        self.__btn_nodes.pack()
-
-        self.__lbl_algo.pack()
-        self.__rbtn_greegy.pack()
-        self.__rbtn_mrv.pack()
-        self.__rbtn_seek.pack()
-        self.__btn_color.pack()
-        self.__btn_exit.pack()
+        self.__input_canvas.configure(yscrollcommand=self.__scrollbar.set)
+        self.__input_canvas.bind('<Configure>',
+                                 lambda e: self.__input_canvas.configure(scrollregion=self.__input_canvas.bbox(ALL)))
+        self.__input_canvas.create_window((0, 0), window=self.__help_frm, anchor=NW)
 
     def __create_entries(self):
         num_nodes = int(self.__num_nodes.get())
         self.__entries.clear()
-        self.clearFrame()
+        self.clear_frame(self.__help_frm)
         for i in range(num_nodes):
-            Label(self.__frm_input, text=f"{i+1}").pack()
-            tmp = Entry(self.__frm_input).pack()
+            Label(self.__help_frm, text=f"{i + 1}: ").grid(row=i, column=0)
+            tmp = Entry(self.__help_frm, width=ENTRIES_WIDTH)
+            tmp.grid(row=i, column=1)
             self.__entries.append(tmp)
-
-    def clearFrame(self):
-        # destroy all widgets from frame
-        for widget in self.__frm_input.winfo_children():
-            widget.destroy()
 
     def __exit(self):
         self.destroy()
 
+    def __draw_graph(self):
+        self.__graph = Draw_Graph(self.__entries, int(self.__num_nodes.get()))
+        self.__graph.create_graph()
 
-
-
-
-
+    def clear_frame(self, frame):
+        # destroy all widgets from frame
+        for widget in frame.winfo_children():
+            widget.destroy()

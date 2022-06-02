@@ -1,28 +1,45 @@
+import psutil
+import tkinter as tk
+from tkinter import *
+import networkx as nx
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import (
+    FigureCanvasTkAgg
+)
 
-def run():
-    import tkinter as tk
-    from tkinter import ttk
+root = Tk()
+root.title("Hello")
 
-    root = tk.Tk()
-    container = ttk.Frame(root)
-    canvas = tk.Canvas(container)
-    scrollbar = ttk.Scrollbar(container, orient="vertical", command=canvas.yview)
-    scrollable_frame = ttk.Frame(canvas)
+mlist = psutil.net_connections(kind="all")
+fig = plt.figure(frameon=True, figsize=(5,1), dpi=100)
+canvas = FigureCanvasTkAgg(fig, root)
+Node = nx.Graph()
 
-    scrollable_frame.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+for v, val in enumerate(mlist):
+    if val[4] != () and val[4][0] != "127.0.0.1":
+        print(str(val[4][0]) + " - " + str(val[6]))
+        print(psutil.Process(val[6]).name())
+        Node.add_node(str(val[4][0]))
+        Node.add_edge(str(val[4][0]), "localhost")
 
-    canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+plt.gca().set_facecolor("grey")
+fig.set_facecolor("black")
 
-    canvas.configure(yscrollcommand=scrollbar.set)
+nx.draw_networkx(Node, pos=nx.spring_layout(Node, 25), alpha=1,
+                 with_labels=False, node_size=100, node_color="green")
 
-    for i in range(50):
-        ttk.Label(scrollable_frame, text="Sample scrolling label").pack()
+canvas.draw()
+canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=True)
 
-    container.pack()
-    canvas.pack(side="left", fill="both", expand=True)
-    scrollbar.pack(side="right", fill="y")
+def Add():
+    Node.add_node(str("LOL"))
+    plt.clf()
+    nx.draw_networkx(Node, pos=nx.spring_layout(Node, 25), alpha=1,
+                     with_labels=False, node_size=100,
+                         node_color="blue")
+    canvas.draw()
 
-    root.mainloop()
+ex = tk.Button(root, text="Update", command=lambda: Add())
+ex.pack(side="bottom")
 
-if __name__ == "__main__":
-    run()
+root.mainloop()
