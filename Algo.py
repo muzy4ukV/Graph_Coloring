@@ -63,10 +63,31 @@ class Algo:
         self.recursive_mrv(list(self.__graph)[0])
 
     def recursive_mrv(self, current_node):
-        self.paint(current_node)
-        for nbr in self.__graph.neighbors(current_node):
-            if self.__graph.nodes[nbr]['color'] == None:
-                self.recursive_mrv(nbr)
+        self.__graph.nodes[current_node]['color'] = self.__list_of_colors[0]
+        stack = [current_node]
+        while len(stack) > 0:
+            node = stack[-1]
+            max_color_num = -1
+            max_node = ''
+            for nbr in self.__graph.neighbors(node):
+                if self.__graph.nodes[nbr]['color'] == None:
+                    current_color_num = self.get_amount_of_colors(nbr)
+                    if current_color_num > max_color_num:
+                        max_color_num = current_color_num
+                        max_node = nbr
+            if not max_color_num == -1:
+                self.paint(max_node)
+                stack.append(max_node)
+            else:
+                stack.pop()
+
+    def get_amount_of_colors(self, node):
+        color_list = list()
+        for nbr in self.__graph.neighbors(node):
+            if self.__graph.nodes[nbr]['color'] != None and not self.__graph.nodes[nbr]['color'] in color_list:
+                color_list.append(self.__graph.nodes[nbr]['color'])
+        return len(color_list)
+
 
     def step(self):
         pass
@@ -74,15 +95,3 @@ class Algo:
     def set_color_map(self):
         for node in self.__graph.nodes:
             self.__color_map.append(self.__graph.nodes[node]['color'])
-
-'''
-    def try_color(self, i):
-        try:
-            self.__graph.nodes[i]['color'] = self.__color_map[i]
-        except IndexError:
-            pass
-            
-        neighbours = list()
-        for num_node in self.__graph.neighbours(node):
-            neighbours.append(self.__graph)
-'''

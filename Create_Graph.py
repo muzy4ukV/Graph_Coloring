@@ -32,7 +32,7 @@ class Create_Graph:
         line = self.__input_text.get(f"{i}.0", END)
         line = line.replace('\n', '')
         if line:
-            messagebox.showerror("Помилка", "Некоректно введені дані (Зайвий пропуск)")
+            messagebox.showerror("Помилка", "Некоректно введені дані (Зайвий символ перенесення рядку)")
             return nx.Graph()
         self.__set_color_none(graph)
         return graph
