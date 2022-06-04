@@ -1,45 +1,25 @@
-import psutil
-import tkinter as tk
 from tkinter import *
 import networkx as nx
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import (
-    FigureCanvasTkAgg
-)
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 root = Tk()
 root.title("Hello")
+frame = Frame(root)
+frame.pack()
 
-mlist = psutil.net_connections(kind="all")
-fig = plt.figure(frameon=True, figsize=(5,1), dpi=100)
-canvas = FigureCanvasTkAgg(fig, root)
+fig = plt.figure()
+canvas = FigureCanvasTkAgg(fig, frame)
 Node = nx.Graph()
 
-for v, val in enumerate(mlist):
-    if val[4] != () and val[4][0] != "127.0.0.1":
-        print(str(val[4][0]) + " - " + str(val[6]))
-        print(psutil.Process(val[6]).name())
-        Node.add_node(str(val[4][0]))
-        Node.add_edge(str(val[4][0]), "localhost")
+Node.add_nodes_from(range(1, 6))
+Node.add_edge(1, 3)
+Node.add_edge(1, 2)
+Node.add_edge(1, 4)
+Node.add_edge(3, 2)
 
-plt.gca().set_facecolor("grey")
-fig.set_facecolor("black")
 
-nx.draw_networkx(Node, pos=nx.spring_layout(Node, 25), alpha=1,
-                 with_labels=False, node_size=100, node_color="green")
 
-canvas.draw()
-canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=True)
 
-def Add():
-    Node.add_node(str("LOL"))
-    plt.clf()
-    nx.draw_networkx(Node, pos=nx.spring_layout(Node, 25), alpha=1,
-                     with_labels=False, node_size=100,
-                         node_color="blue")
-    canvas.draw()
-
-ex = tk.Button(root, text="Update", command=lambda: Add())
-ex.pack(side="bottom")
 
 root.mainloop()
