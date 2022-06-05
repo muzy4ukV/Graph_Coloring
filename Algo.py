@@ -16,11 +16,11 @@ class Algo:
             self.set_color_map()
             return self.__color_map
         elif self.__algo_name == "MRV":
-            self.mrv()
+            self.mrv(list(self.__graph)[0])
             self.set_color_map()
             return self.__color_map
         elif self.__algo_name == "Ступенева":
-            self.step()
+            self.degree()
             self.set_color_map()
             return self.__color_map
         else:
@@ -59,10 +59,7 @@ class Algo:
             neighbours.append(nbr)
         return neighbours
 
-    def mrv(self):
-        self.recursive_mrv(list(self.__graph)[0])
-
-    def recursive_mrv(self, current_node):
+    def mrv(self, current_node):
         self.__graph.nodes[current_node]['color'] = self.__list_of_colors[0]
         stack = [current_node]
         while len(stack) > 0:
@@ -89,8 +86,26 @@ class Algo:
         return len(color_list)
 
 
-    def step(self):
-        pass
+    def degree(self):
+        self.recursive_degree(list(self.__graph)[0])
+
+    def recursive_degree(self, node):
+        self.paint(node)
+        while True:
+            next_node = self.get_more_degrees_neighbor(node)
+            if next_node:
+                self.recursive_degree(next_node)
+            else:
+                break
+
+    def get_more_degrees_neighbor(self, node):
+        max_degree = 0
+        next_node = ''
+        for nbr in self.__graph.neighbors(node):
+            if self.__graph.degree[nbr] > max_degree and self.__graph.nodes[nbr]['color'] == None:
+                max_degree = self.__graph.degree[nbr]
+                next_node = nbr
+        return next_node
 
     def set_color_map(self):
         for node in self.__graph.nodes:

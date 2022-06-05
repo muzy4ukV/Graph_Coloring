@@ -1,5 +1,5 @@
 from Constants import *
-from Create_Graph import *
+from ViewModel import *
 from Algo import *
 from tkinter.scrolledtext import ScrolledText
 import matplotlib.pyplot as plt
@@ -12,7 +12,7 @@ class App(Tk):
         # Рамка для вводу
         self.__input_frm = LabelFrame(self, text="Введення сипску ребер", relief=RAISED, borderwidth=7, font=("Arial", 16))
         self.__input_text = ScrolledText(self.__input_frm, width=30, height=10, font=("Arial", 16), padx=5, pady=5)
-        self.__graph = Create_Graph(self.__input_text)
+        self.__graph = ViewModel(self.__input_text)
 
         # Рамка для розміщення графу
         self.__graph_frm = LabelFrame(self, text="Зображення графу", relief=RAISED, borderwidth=7)
@@ -34,6 +34,7 @@ class App(Tk):
 
         self.__exit_btn = Button(self.__widgets_frm, text="Вихід", command=self.__exit)
         self.__save_btn = Button(self.__widgets_frm, text="Зберегти результат", command=self.save_result)
+        self.__upload_btn = Button(self.__widgets_frm, text="Зберегти результат", command=self.upload_result)
 
     def run(self):
         self.__setup_window()
@@ -90,13 +91,5 @@ class App(Tk):
         choice = messagebox.askyesno("Вихід", "Ви хочете закрити програму?")
         if choice:
             exit(0)
-
-
-
-
-'''
-    def clear_frame(self, frame):
-        # destroy all widgets from frame
-        for widget in frame.winfo_children():
-            widget.destroy()
-'''
+    def upload_result(self):
+        pass

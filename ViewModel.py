@@ -2,7 +2,7 @@ import networkx as nx
 from tkinter import messagebox
 from tkinter import *
 
-class Create_Graph:
+class ViewModel:
     def __init__(self, input_text):
         self.__input_text = input_text
 
