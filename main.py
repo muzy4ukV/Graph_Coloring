@@ -1,7 +1,7 @@
-from App import App
+from View import View
 
 def main():
-    app = App()
+    app = View()
     app.run()
     app.mainloop()
 
