@@ -2,6 +2,7 @@ from Algo import *
 
 
 class Algo_Greedy(Algo):
+    '''Цей клас реалізує жадібний алгоритм розфарбовування'''
     def __init__(self, graph):
         super().__init__(graph)
         self._create_rand_colors()

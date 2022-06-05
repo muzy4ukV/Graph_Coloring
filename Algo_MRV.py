@@ -2,6 +2,7 @@ from Algo import *
 
 
 class Algo_MRV(Algo):
+    '''Цей клас реалізує алгоритм розфарбовування пошук з поверненням з MRV евристикою'''
     def __init__(self, graph):
         super().__init__(graph)
         self._create_rand_colors()

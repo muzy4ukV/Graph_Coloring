@@ -8,11 +8,11 @@ from Algo_Degree import *
 
 
 class ViewModel:
-    """dsfdsfjosfnsfs"""
+    '''Клас призначений для взаємодії візуального класу й класу алгоритму'''
     def __init__(self, input_text, rbnt_result, figure):
         self.__input_text = input_text
         self.__name_algo = rbnt_result
-        self.__fig = figure
+        self.__figure = figure
         self.__graph = nx.Graph()
 
     def get_graph(self):
@@ -77,10 +77,10 @@ class ViewModel:
             exit(0)
 
     def save_result(self):
-        if len(self.__fig.axes):
+        if len(self.__figure.axes):
             with open(SAVED_GRAPH, "wt") as file:
                 file.write(self.__input_text.get("1.0", END))
-            self.__fig.savefig(PHOTO_DIRECTION, format="PNG", dpi=200)
+            self.__figure.savefig(PHOTO_DIRECTION, format="PNG", dpi=200)
             messagebox.showinfo("", f"Граф збережений у {PHOTO_DIRECTION} та {SAVED_GRAPH}")
         else:
             messagebox.showwarning("Попередження", "Ви не розфарбували граф")

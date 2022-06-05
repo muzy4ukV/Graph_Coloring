@@ -2,6 +2,7 @@ from random import randrange
 
 
 class Algo:
+    '''Базовий клас для 3 алгоритмів розфарбовування, що містить спільні методи'''
     def __init__(self, graph):
         self._graph = graph
         self._list_of_colors = list()
@@ -19,7 +20,7 @@ class Algo:
         num_color = 0
         num_neighbor = 0
         node_color = self._list_of_colors[num_color]
-        neighbors = self._get_neighbors(node)
+        neighbors = self.__get_neighbors(node)
         while num_neighbor < len(neighbors):
             if self._graph.nodes[neighbors[num_neighbor]]['color'] == node_color:
                 num_color += 1
@@ -29,7 +30,7 @@ class Algo:
                 num_neighbor += 1
         self._graph.nodes[node]['color'] = node_color
 
-    def _get_neighbors(self, node):
+    def __get_neighbors(self, node):
         neighbours = list()
         for nbr in self._graph.neighbors(node):
             neighbours.append(nbr)
