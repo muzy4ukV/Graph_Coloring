@@ -2,23 +2,26 @@ import networkx as nx
 from tkinter import messagebox
 from tkinter import *
 from Constants import *
-from Algo_Greedy import *
-from Algo_MRV import *
-from Algo_Degree import *
+from AlgoGreedy import *
+from AlgoMRV import *
+from AlgoDegree import *
 
 
 class ViewModel:
-    '''Клас призначений для взаємодії візуального класу й класу алгоритму'''
+    """Клас призначений для взаємодії візуального класу й класу алгоритму"""
     def __init__(self, input_text, rbnt_result, figure):
+        # Атрибути надані класом View, з яких зчитується інформація
         self.__input_text = input_text
         self.__name_algo = rbnt_result
         self.__figure = figure
         self.__graph = nx.Graph()
 
     def get_graph(self):
+        # Метод який зчитує інформацію з атрибута __input_text й створює об'єкт графу
         self.__graph = nx.Graph()
         i = 1
         line = self.__input_text.get(f"{i}.0", f"{i}.end")
+        # Цикл для зчитування до першого пустого рядку
         while line:
             pos = line.find(":")
             if pos != -1:
@@ -33,6 +36,7 @@ class ViewModel:
         return self.__graph
 
     def __add_edges(self, pos, line):
+        # Метод який приймає рядок та парсить його по сиволу ':' та додає вершини й ребра до графу
         node = line[0:pos]
         self.__graph.add_node(node)
         edges = line[pos + 1:]
@@ -46,6 +50,7 @@ class ViewModel:
                 self.__graph.add_edge(node, node2)
 
     def __check_if_clear(self, i):
+        # Перевірка чи не залишилося ще данних після зчитування до пустого рядка
         line = self.__input_text.get(f"{i}.0", END)
         line = line.replace('\n', '')
         if line:
@@ -53,22 +58,24 @@ class ViewModel:
             return nx.Graph()
 
     def __set_color_none(self):
+        # Метод який позначає кожну вершину як нерозфарбовану
         for i in self.__graph.nodes:
             self.__graph.nodes[i]['color'] = None
 
     def get_color_map(self):
+        # Метод який повертає список кольорів для вершин на основі обраного алгоритму
         if self.__name_algo.get() == "Жадібний":
-            algo = Algo_Greedy(self.__graph)
+            algo = AlgoGreedy(self.__graph)
             color_map = algo.greedy()
             return color_map
 
         elif self.__name_algo.get() == "MRV":
-            algo = Algo_MRV(self.__graph)
+            algo = AlgoMRV(self.__graph)
             color_map = algo.mrv()
             return color_map
 
         elif self.__name_algo.get() == "Ступенева":
-            algo = Algo_Degree(self.__graph)
+            algo = AlgoDegree(self.__graph)
             color_map = algo.degree()
             return color_map
 
@@ -77,6 +84,7 @@ class ViewModel:
             exit(0)
 
     def save_result(self):
+        # Реалізація роботи кнопки "Зберегти результат"
         if len(self.__figure.axes):
             with open(SAVED_GRAPH, "wt") as file:
                 file.write(self.__input_text.get("1.0", END))
@@ -86,6 +94,7 @@ class ViewModel:
             messagebox.showwarning("Попередження", "Ви не розфарбували граф")
 
     def upload_result(self):
+        # Реалізація роботи кнопки "Завантажити граф"
         try:
             file = open(SAVED_GRAPH, "rt")
             self.__input_text.delete('1.0', END)
@@ -96,6 +105,7 @@ class ViewModel:
 
     @staticmethod
     def exit():
+        # Реалізація роботи кнопки "Вихід"
         choice = messagebox.askyesno("Вихід", "Ви хочете закрити програму?")
         if choice:
             exit(0)

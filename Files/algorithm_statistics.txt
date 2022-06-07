@@ -1,0 +1,6 @@
+Backtraking algo (MRV)
+Number of used color: 4
+Number of recursion calls: 11
+The number of failed attempts to assign a color: 18
+The number of times we choose another node: 12
+Amount of comparisions: 32
