@@ -1,7 +1,6 @@
 import networkx as nx
 from tkinter import messagebox
 from tkinter import *
-from Constants import *
 from AlgoGreedy import *
 from AlgoMRV import *
 from AlgoDegree import *
@@ -64,6 +63,9 @@ class ViewModel:
 
     def get_color_map(self):
         # Метод який повертає список кольорів для вершин на основі обраного алгоритму
+        if len(self.__graph) == 0:
+            return []
+
         if self.__name_algo.get() == "Жадібний":
             algo = AlgoGreedy(self.__graph)
             color_map = algo.greedy()

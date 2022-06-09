@@ -16,7 +16,7 @@ class View(Tk):
         self.__canvas = FigureCanvasTkAgg(self.__figure, self.__graph_frm)
 
         """Рамка для розміщення віджетів"""
-        self.__widgets_frm = LabelFrame(self, text="Введення сипску суміжності", font=("Comic Sans MS", 16))
+        self.__widgets_frm = LabelFrame(self, text="Введення списку суміжності", font=("Comic Sans MS", 16))
         # Віджет який приймає значення графу
         self.__input_text = ScrolledText(self.__widgets_frm, width=30, height=10, font=("Comic Sans MS", 16),
                                          wrap=WORD, pady=5, padx=5)
@@ -29,8 +29,8 @@ class View(Tk):
                                          text="Жадібний метод", font=("Comic Sans MS", 14))
         self.__mrv_rbtn = Radiobutton(self.__widgets_frm, variable=self.__name_algo, value="MRV",
                                       text="Пошук з поверненням (MRV)", font=("Comic Sans MS", 14))
-        self.__seek_rbtn = Radiobutton(self.__widgets_frm, variable=self.__name_algo, value="Ступенева",
-                                       text="Пошук з поверненням (Ступенева евристика)", font=("Comic Sans MS", 14))
+        self.__step_rbtn = Radiobutton(self.__widgets_frm, variable=self.__name_algo, value="Ступенева",
+                                       text="Пошук з поверненням (Степенева евристика)", font=("Comic Sans MS", 14))
         # Атрибут класу ViewModel для звернення до його методів
         self.__vm = ViewModel(self.__input_text, self.__name_algo, self.__figure)
         # Кнопки для виконання операцій
@@ -66,7 +66,7 @@ class View(Tk):
         self.__algo_lbl.grid(row=1, column=0, padx=10, pady=5, columnspan=2)
         self.__greedy_rbtn.grid(row=2, column=0, padx=10, pady=5, sticky="w", columnspan=2)
         self.__mrv_rbtn.grid(row=3, column=0, padx=10, pady=5, sticky="w", columnspan=2)
-        self.__seek_rbtn.grid(row=4, column=0, padx=10, pady=5, sticky="w", columnspan=2)
+        self.__step_rbtn.grid(row=4, column=0, padx=10, pady=5, sticky="w", columnspan=2)
         self.__color_btn.grid(row=5, column=0, padx=10, pady=5, sticky="we", columnspan=2)
         self.__save_btn.grid(row=6, column=0, padx=10, pady=5, sticky="we")
         self.__upload_btn.grid(row=6, column=1, padx=10, pady=5, sticky="we")

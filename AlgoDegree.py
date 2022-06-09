@@ -13,11 +13,16 @@ class AlgoDegree(Algo):
         # Перевіряємо чи граф не пустий
         if len(self._graph) == 0:
             return []
-        # Робимо перший рекурсивний виклик для першої вершини
-        self.__recursive_degree(list(self._graph)[0])
+        # Знаходимо вершину з найбільшим степенем й робимо перший рекурсивний виклик
+        max_degree = list(self._graph)[0]
+        for node in self._graph:
+            if self._graph.degree[node] > self._graph.degree[max_degree]:
+                max_degree = node
+        self.__recursive_degree(max_degree)
         # Переписуємо присвоєні кольора для вершин у список та зберігаємо статистику
+        self.__check_if_all_paint()
         self._set_color_map()
-        self._save_stastics()
+        self._save_statistics()
         return self._color_map
 
     def __recursive_degree(self, node):
@@ -39,9 +44,15 @@ class AlgoDegree(Algo):
         next_node = ''
         for nbr in self._graph.neighbors(node):
             if self._graph.nodes[nbr]['color'] == None:
-                self._num_of_comparision += 1
                 if self._graph.degree[nbr] > max_degree:
                     self._num_of_changes_node += 1
                     max_degree = self._graph.degree[nbr]
                     next_node = nbr
         return next_node
+
+    def __check_if_all_paint(self):
+        for node in self._graph:
+            if self._graph.nodes[node]['color'] == None:
+                messagebox.showwarning("Попередження", "В графі пристуні компоненти зв'язності")
+                self.__recursive_degree(node)
+

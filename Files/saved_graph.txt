@@ -1,12 +1,9 @@
-a: b c e f
-b: e f g i
-c: a b
-d: i g h e
-e: a c k l
-f:
-g: h i k
-h: a b e
-i: l k e d a
-k: c b e d
-l: a e f
-
+1: 2 3 5
+2: 4 6 8
+3: 0 5 2 8
+4: 2 8 6 1 0 7
+5: 3 7 4
+6: 9 8
+7: 4 1 8 3
+8: 9 3 6 4 1 5
+9: 0 1 2

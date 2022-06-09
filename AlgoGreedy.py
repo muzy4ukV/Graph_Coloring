@@ -13,6 +13,6 @@ class AlgoGreedy(Algo):
         for i in self._graph.nodes:
             self._paint(i)
         self._set_color_map()
-        self._save_stastics()
+        self._save_statistics()
         # повертаємо список кольрів для кожної вершини графу
         return self._color_map
