@@ -1,7 +1,6 @@
 class Stack:
     """Цей клас реалізує стек"""
     def __init__(self):
-        self.__num_recursion = 0
         self.__stack = list()
 
     def is_empty(self):
@@ -11,7 +10,6 @@ class Stack:
             return False
 
     def push(self, element):
-        self.__num_recursion += 1
         self.__stack.append(element)
 
     def pop(self):
@@ -27,9 +25,6 @@ class Stack:
         else:
             print("Stack is already empty")
             raise IndexError
-
-    def get_num_recursion(self):
-        return self.__num_recursion
 
 
 
