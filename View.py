@@ -77,8 +77,9 @@ class View(Tk):
         # Отримуємо граф від класу ViewModel
         graph = self.__vm.get_graph()
         # Отримуємо список кольорів вершин від класу ViewModel
-        color_map = self.__vm.get_color_map()
+        color_map = self.__vm.get_color_map(graph)
         self.__figure.clf()
-        nx.draw_networkx(graph, pos=nx.spring_layout(graph, 15), with_labels=True, node_size=350, node_color=color_map)
+        nx.draw_networkx(graph, pos=nx.spring_layout(graph, 15), with_labels=True, node_size=400, node_color=color_map,
+                         font_color="black", font_family="Comic Sans MS", font_size=15)
         self.__canvas.get_tk_widget().pack()
         self.__canvas.draw()

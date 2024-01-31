@@ -1,5 +1,4 @@
 Backtraking algo (Degree)
-Number of used color: 5
-Number of recursion calls: 10
-Number of states of the graph: 28
-The number of times we choose another node: 13
+Number of used color: 4
+Number of states of the graph: 24
+The number of times we choose another node: 5

@@ -12,16 +12,15 @@ class Algo:
         self._color_map = list()
         # Атрибути для збереження статистичних даних
         self._algo_name = algo_name
-        self._num_recursion = 0
         self._num_of_colors = 0
         self._num_of_graph_states = 1
         self._num_of_changes_node = 0
 
     def _create_rand_colors(self):
-        # Метод який ствоює список унікальних кольорів у форматі (R, G, B), для розфарбовування графу
+        # Метод який створює список унікальних кольорів у форматі (R, G, B), для розфарбовування графу
         i = 1
         while len(self._graph) >= i:
-            color = (randrange(0, 10, 2) / 10, randrange(0, 10, 2) / 10, randrange(0, 10, 2) / 10)
+            color = (randrange(0, 10) / 10, randrange(0, 10) / 10, randrange(0, 10) / 10)
             if not (color in self._list_of_colors):
                 self._list_of_colors.append(color)
                 i += 1
@@ -60,9 +59,8 @@ class Algo:
         with open(ALGORITHM_STATISTICS, "wt") as file_out:
             print(self._algo_name, file=file_out)
             file_out.write(f"Number of used color: {self._num_of_colors}\n")
-            file_out.write(f"Number of recursion calls: {self._num_recursion}\n")
             file_out.write(f"Number of states of the graph: {self._num_of_graph_states}\n")
-            file_out.write(f"The number of times we choose another node: {self._num_of_changes_node}\n")
+            file_out.write(f"The number of times we choose another node: {self._num_of_changes_node}")
 
     def __set_num_color(self):
         # Метод для обраховування кількості кольорів
@@ -71,3 +69,17 @@ class Algo:
             if not color in used_colors:
                 used_colors.append(color)
         self._num_of_colors = len(used_colors)
+
+
+
+
+
+
+
+
+
+'''
+    def _save_order(self, node):
+        with open(NODE_ORDER, 'at') as file_out:
+            print(node, self._graph.nodes[node]['color'], file=file_out)
+'''

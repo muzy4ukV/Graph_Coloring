@@ -1,5 +1,4 @@
 import networkx as nx
-from tkinter import messagebox
 from tkinter import *
 from AlgoGreedy import *
 from AlgoMRV import *
@@ -30,13 +29,16 @@ class ViewModel:
             else:
                 messagebox.showerror("Помилка", "Некоректно введені дані (Відсутній символ ':')")
                 return nx.Graph()
-        self.__check_if_clear(i)
+        self.__graph = self.__check_if_clear(i)
         self.__set_color_none()
         return self.__graph
 
     def __add_edges(self, pos, line):
         # Метод який приймає рядок та парсить його по сиволу ':' та додає вершини й ребра до графу
         node = line[0:pos]
+        if len(node) >= 5:
+            messagebox.showwarning("Попередження", f"Назва вершини '{node}' не відповідає формату\nКількість символів більша за 5")
+            return
         self.__graph.add_node(node)
         edges = line[pos + 1:]
         edges = edges.strip()
@@ -44,6 +46,9 @@ class ViewModel:
         for node2 in edges:
             if node == node2:
                 messagebox.showwarning("Попередження", "Петлі у графах не створюються")
+                continue
+            elif len(node2) >= 5:
+                messagebox.showwarning("Попередження", f"Назва вершини '{node2}' не відповідає формату\nКількість символів більша за 5")
                 continue
             elif node2:
                 self.__graph.add_edge(node, node2)
@@ -55,29 +60,31 @@ class ViewModel:
         if line:
             messagebox.showerror("Помилка", "Некоректно введені дані (Зайві символи після введення)")
             return nx.Graph()
+        else:
+            return self.__graph
 
     def __set_color_none(self):
         # Метод який позначає кожну вершину як нерозфарбовану
         for i in self.__graph.nodes:
             self.__graph.nodes[i]['color'] = None
 
-    def get_color_map(self):
+    def get_color_map(self, graph):
         # Метод який повертає список кольорів для вершин на основі обраного алгоритму
-        if len(self.__graph) == 0:
+        if len(graph) == 0:
             return []
 
         if self.__name_algo.get() == "Жадібний":
-            algo = AlgoGreedy(self.__graph)
+            algo = AlgoGreedy(graph)
             color_map = algo.greedy()
             return color_map
 
         elif self.__name_algo.get() == "MRV":
-            algo = AlgoMRV(self.__graph)
+            algo = AlgoMRV(graph)
             color_map = algo.mrv()
             return color_map
 
         elif self.__name_algo.get() == "Ступенева":
-            algo = AlgoDegree(self.__graph)
+            algo = AlgoDegree(graph)
             color_map = algo.degree()
             return color_map
 

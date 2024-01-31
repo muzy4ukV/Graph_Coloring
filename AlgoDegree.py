@@ -7,9 +7,11 @@ class AlgoDegree(Algo):
         # Конструктор викликає контруктор базового класу й встановлює список можливих кольорів для вершин
         super().__init__(graph, algo_name)
         self._create_rand_colors()
+        self.__flag = False
+
 
     def degree(self):
-        # Реалізація алгоритму Backtracking MRV
+        # Реалізація алгоритму Backtracking Degree heuristic
         # Перевіряємо чи граф не пустий
         if len(self._graph) == 0:
             return []
@@ -26,13 +28,13 @@ class AlgoDegree(Algo):
         return self._color_map
 
     def __recursive_degree(self, node):
-        self._num_recursion += 1
         self._paint(node)
         while True:
             # Визанчаємо вершину-сусіда з найбільшим степенем для заданої
             next_node = self.__get_more_degrees_neighbor(node)
             # Якщо така існує і вона не розфарбована, то робимо наступний рекурсивний виклик для цієї вершини
-            if next_node:
+            if next_node != '':
+                self._num_of_changes_node -= 1
                 self.__recursive_degree(next_node)
             else:
                 # Якщо всі сусіди для поточної вершини розфарбовані, то закінчуємо виклики
@@ -53,6 +55,10 @@ class AlgoDegree(Algo):
     def __check_if_all_paint(self):
         for node in self._graph:
             if self._graph.nodes[node]['color'] == None:
-                messagebox.showwarning("Попередження", "В графі пристуні компоненти зв'язності")
-                self.__recursive_degree(node)
+                if not self.__flag:
+                    self.__flag = True
+                    messagebox.showwarning("Попередження", "В графі пристуні компоненти зв'язності")
+                    self.__recursive_degree(node)
+                else:
+                    self.__recursive_degree(node)
 
