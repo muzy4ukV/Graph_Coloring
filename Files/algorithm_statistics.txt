@@ -2,3 +2,4 @@ Backtraking algo (Degree)
 Number of used color: 4
 Number of states of the graph: 24
 The number of times we choose another node: 5
+

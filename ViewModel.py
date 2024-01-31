@@ -118,6 +118,3 @@ class ViewModel:
         choice = messagebox.askyesno("Вихід", "Ви хочете закрити програму?")
         if choice:
             exit(0)
-
-
-

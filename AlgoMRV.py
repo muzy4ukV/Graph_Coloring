@@ -72,7 +72,3 @@ class AlgoMRV(Algo):
                     self.__mrv_stack(node)
                 else:
                     self.__mrv_stack(node)
-
-
-
-

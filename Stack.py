@@ -25,8 +25,3 @@ class Stack:
         else:
             print("Stack is already empty")
             raise IndexError
-
-
-
-
-

@@ -69,17 +69,3 @@ class Algo:
             if not color in used_colors:
                 used_colors.append(color)
         self._num_of_colors = len(used_colors)
-
-
-
-
-
-
-
-
-
-'''
-    def _save_order(self, node):
-        with open(NODE_ORDER, 'at') as file_out:
-            print(node, self._graph.nodes[node]['color'], file=file_out)
-'''
